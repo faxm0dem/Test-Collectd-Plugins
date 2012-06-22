@@ -25,8 +25,8 @@ perldoc command.
 
 You can also look for information at:
 
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-Collectd-Plugins
+    Github (report bugs here)
+        https://github.com/faxm0dem/Test-Collectd-Plugins/issues
 
     AnnoCPAN, Annotated CPAN documentation
         http://annocpan.org/dist/Test-Collectd-Plugins
@@ -43,8 +43,6 @@ LICENSE AND COPYRIGHT
 Copyright (C) 2012 Fabien Wernli
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
+under the terms of: CeCILL Free Software License Agreement
+http://www.cecill.info/licences/Licence_CeCILL_V2-en.html
 

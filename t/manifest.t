@@ -12,6 +12,6 @@ eval "use Test::CheckManifest 0.9";
 plan skip_all => "Test::CheckManifest 0.9 required" if $@;
 ok_manifest(
 	{
-		filter => [qr/\.(svn|git)/,qr/MANIFEST.bak/,qr/\.tar\.gz/],
+		filter => [qr/\.(svn|git)/,qr/MANIFEST.bak/,qr/Makefile.old/,qr/\.tar\.gz/],
 	}
 );

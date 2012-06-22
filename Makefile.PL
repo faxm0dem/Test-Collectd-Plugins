@@ -6,12 +6,33 @@ author   q{Fabien Wernli <wernli_workingat_in2p3.fr>};
 license  'perl';
 
 build_requires 'Test::More';
+build_requires 'Test::File::ShareDir';
+build_requires 'Parse::Yapp';
 
 requires 'Package::Alias';
+requires 'Carp';
+requires 'Parse::Lex';
 
-install_share 'share';
+recommends 'File::ShareDir';
+
+install_share 'module', 'Test::Collectd::Plugins', 'share';
 
 auto_install;
+
+
+# generate the Parser
+postamble(q!
+CONFIG_PARSER_DIRNAME = blib/lib/Test/Collectd/Config
+CONFIG_PARSER_FILENAME = $(CONFIG_PARSER_DIRNAME)/Parse.pm
+
+$(CONFIG_PARSER_FILENAME): parser.yp pm_to_blib
+	mkdir -p $(CONFIG_PARSER_DIRNAME)
+	yapp -s -m Test::Collectd::Config::Parse -o $(CONFIG_PARSER_FILENAME) parser.yp
+
+parser: $(CONFIG_PARSER_FILENAME)
+
+all :: parser
+!);
 
 WriteAll;
 

@@ -4,8 +4,11 @@ use 5.006;
 use strict;
 use warnings;
 use Carp qw(croak cluck);
-use DDP;
 use POSIX qw/isdigit/;
+use namespace::autoclean;
+use Test::Collectd::Config qw(parse);
+
+BEGIN {use Package::Alias Collectd => "FakeCollectd"}
 
 =head1 NAME
 
@@ -19,7 +22,6 @@ Version 0.01
 
 our $VERSION = '0.1001';
 
-use Package::Alias Collectd => "FakeCollectd";
 use base 'Test::Builder::Module';
 use IO::File;
 
@@ -88,7 +90,7 @@ sub _load_module ($) {
 	eval "require $module";
 }
 
-=head2 read_ok $plugin_module, $plugin_name
+=head2 read_ok $plugin_module, $plugin_name [$message ]
 
 First does the same as L</load_ok> then tries to fire up the registered read callback, while intercepting all calls to L<Collectd/plugin_dispatch_values>, storing its arguments into the %FakeCollectd hash. The latter are checked against the following rules:
 
@@ -96,7 +98,7 @@ First does the same as L</load_ok> then tries to fire up the registered read cal
 
 =cut
 
-sub read_ok ($$;$) {
+sub read_ok ($$;$$) {
 	my $module = shift;
 	my $plugin = shift;
 	my $msg = shift || "read OK";
@@ -106,17 +108,13 @@ sub read_ok ($$;$) {
 $tb -> subtest($msg, sub {
 
 	$tb->ok(_load_module($module), "load plugin module");
-
 	$tb->ok(defined $FakeCollectd{$plugin}->{Callback}->{Read}, "read callback defined");
 	my $reader = $FakeCollectd{$plugin}->{Callback}->{Read};
+	_reset_values($plugin);
 	eval "$reader()";
 	$tb->is_eq($@,"","reader returned");
-	my @values;
-	if (exists $FakeCollectd{$plugin}->{Values}) {
-		@values = @{$FakeCollectd{$plugin}->{Values}};
-	} else {
-		die $@;
-	}
+	my @values = @{$FakeCollectd{$plugin}->{Values}}
+		if $tb->ok(exists $FakeCollectd{$plugin}->{Values}, "read callback returned some values");
 	$tb->ok(scalar @values, "dispatch called");
 	for (@values) {
 		$tb->is_eq(ref $_,"ARRAY","value is array");
@@ -136,7 +134,7 @@ $tb -> subtest($msg, sub {
 =cut
 
 		for (qw(plugin type values)) {
-			$tb->ok(exists $dispatch{$_}, "key '$_' exists") or return undef;
+			$tb->ok(exists $dispatch{$_}, "mandatory key '$_' exists") or return;
 		}
 
 =item * Only the following keys are valid: plugin, type, values, time, interval, host, plugin_instance, type_instance.
@@ -161,6 +159,12 @@ $tb -> subtest($msg, sub {
 		my $vref = ref $dispatch{values};
 		$tb->is_eq ($vref, "ARRAY", "values is ARRAY");
 		$tb -> is_eq(scalar @{$dispatch{values}}, scalar @type, "number of dispatched 'values' matches type spec for '$dispatch{type}'");
+
+		my $i=0;
+		for (@{$dispatch{values}}) {
+			$tb -> ok (defined $_, "value $i for $dispatch{plugin} ($dispatch{type}) is defined");
+			$i++;
+		}
 
 =item * All other keys must be scalar strings with at most 63 characters: C<plugin>, C<type>, C<host>, C<plugin_instance> and C<type_instance>.
 
@@ -231,14 +235,43 @@ Returns arrayref containing the list of arguments passed to L<Collectd/plugin_di
 
 =cut
 
-sub read_values {
+sub read_values ($$) {
 	my $module = shift;
 	my $plugin = shift;
 	_load_module($module);
+	my $reader = $FakeCollectd{$plugin}->{Callback}->{Read};
+	return unless $reader;
+	_reset_values($plugin);
+	eval "$reader()";
+	return if $@;
 	if (exists $FakeCollectd{$plugin}->{Values}) {
 		@{$FakeCollectd{$plugin}->{Values}};
 	} else {
 		return;
+	}
+}
+
+sub _read_config ($$$) {
+	my $module = shift;
+	my $plugin = shift;
+	my $filename = shift;
+	_load_module($module);
+	my $cb = $FakeCollectd{$plugin}->{Callback}->{Config};
+	unless ($cb) {
+		croak "plugin $plugin does not provide a config callback";
+		return;
+	}
+	my $config = parse($filename);
+	croak "parsing of $filename resulted in empty config" unless $config;
+	#eval "$cb->($config)" or croak("config callback of $plugin returns false $@");
+	eval {no strict "refs"; &$cb($config)} or croak("config callback $cb returns false $@");
+	return $config;
+}
+
+sub _reset_values ($) {
+	my $plugin = shift;
+	if (exists $FakeCollectd{$plugin}->{Values}) {
+		undef @{$FakeCollectd{$plugin}->{Values}};
 	}
 }
 
@@ -253,9 +286,9 @@ sub _get_type {
 			$typesdb = [ $typesdb ];
 		}
 	} else {
-		warn "empty typesdb! using builtin";
 		require File::ShareDir;
 		$typesdb = [ File::ShareDir::module_file(__PACKAGE__, "types.db") ];
+		 warn "no typesdb - using builtin ", join ", ", @$typesdb;
 	}
 	for my $file (@$typesdb) {
 		my $fh = IO::File -> new($file, "r");

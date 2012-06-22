@@ -1,10 +1,18 @@
 #!/usr/bin/perl
 
+BEGIN {
+	# this ensures the shipped but not yet installed typesdb module param is being used
+	use Test::File::ShareDir
+	-share => {
+		-module => { 'Test::Collectd::Plugins' => 'share/Test-Collectd-Plugins' },
+	};
+}
+
 use strict;
 use warnings;
 use lib "t/lib";
 use Test::More;
-use Test::Collectd::Plugins typesdb => File::Spec->catfile($ENV{PWD}, 'share', 'types.db');
+use Test::Collectd::Plugins;
 use Module::Find;
 
 my @module = findsubmod "Collectd::Plugins::NOK";

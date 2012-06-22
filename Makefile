@@ -13,19 +13,19 @@
 
 #     ABSTRACT => q[Common out-of-band collectd plugin test suite]
 #     AUTHOR => [q[Fabien Wernli, C<< <wernli_workingat_in2p3.fr> >>, Fabien Wernli <wernli_workingat_in2p3.fr>]]
-#     BUILD_REQUIRES => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.59] }
+#     BUILD_REQUIRES => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.59], Parse::Yapp=>q[0], Test::File::ShareDir=>q[0] }
 #     CONFIGURE_REQUIRES => {  }
 #     DISTNAME => q[Test-Collectd-Plugins]
 #     LICENSE => q[perl]
 #     MIN_PERL_VERSION => q[5.006]
 #     NAME => q[Test::Collectd::Plugins]
 #     NO_META => q[1]
-#     PREREQ_PM => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.59], Package::Alias=>q[0] }
+#     PREREQ_PM => { Test::More=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Package::Alias=>q[0], Carp=>q[0] }
 #     VERSION => q[0.1001]
 #     VERSION_FROM => q[lib/Test/Collectd/Plugins.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/00-load.t t/01-read.t t/02-invalid.t t/manifest.t t/pod-coverage.t t/pod.t] }
+#     test => { TESTS=>q[t/00-load.t t/01-read.t t/02-invalid.t t/03-test-collectd-config.t t/04-read-with-config.t t/manifest.t t/pod-coverage.t t/pod.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -49,7 +49,7 @@ LIBC =
 LIB_EXT = .a
 OBJ_EXT = .o
 OSNAME = linux
-OSVERS = 3.2.0-1-amd64
+OSVERS = 3.2.0-2-amd64
 RANLIB = :
 SITELIBEXP = /usr/local/share/perl/5.14.2
 SITEARCHEXP = /usr/local/lib/perl/5.14.2
@@ -167,6 +167,7 @@ O_FILES  =
 H_FILES  = 
 MAN1PODS = 
 MAN3PODS = lib/FakeCollectd.pm \
+	lib/Test/Collectd/Config.pm \
 	lib/Test/Collectd/Plugins.pm
 
 # Where is the Config information that we are using/depend on
@@ -190,10 +191,13 @@ PERL_ARCHIVE_AFTER =
 
 
 TO_INST_PM = lib/FakeCollectd.pm \
+	lib/Test/Collectd/Config.pm \
 	lib/Test/Collectd/Plugins.pm
 
 PM_TO_BLIB = lib/FakeCollectd.pm \
 	blib/lib/FakeCollectd.pm \
+	lib/Test/Collectd/Config.pm \
+	blib/lib/Test/Collectd/Config.pm \
 	lib/Test/Collectd/Plugins.pm \
 	blib/lib/Test/Collectd/Plugins.pm
 
@@ -419,9 +423,11 @@ POD2MAN = $(POD2MAN_EXE)
 
 manifypods : pure_all  \
 	lib/FakeCollectd.pm \
+	lib/Test/Collectd/Config.pm \
 	lib/Test/Collectd/Plugins.pm
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
 	  lib/FakeCollectd.pm $(INST_MAN3DIR)/FakeCollectd.$(MAN3EXT) \
+	  lib/Test/Collectd/Config.pm $(INST_MAN3DIR)/Test::Collectd::Config.$(MAN3EXT) \
 	  lib/Test/Collectd/Plugins.pm $(INST_MAN3DIR)/Test::Collectd::Plugins.$(MAN3EXT) 
 
 
@@ -754,7 +760,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/00-load.t t/01-read.t t/02-invalid.t t/manifest.t t/pod-coverage.t t/pod.t
+TEST_FILES = t/00-load.t t/01-read.t t/02-invalid.t t/03-test-collectd-config.t t/04-read-with-config.t t/manifest.t t/pod-coverage.t t/pod.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -785,7 +791,9 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Fabien Wernli, C&lt;&lt; &lt;wernli_workingat_in2p3.fr&gt; &gt;&gt;, Fabien Wernli &lt;wernli_workingat_in2p3.fr&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,006,0,0" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Carp::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Package::Alias" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Parse::Lex" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-gnu-thread-multi-5.14" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    </IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -797,6 +805,7 @@ ppd :
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
 	  lib/FakeCollectd.pm blib/lib/FakeCollectd.pm \
+	  lib/Test/Collectd/Config.pm blib/lib/Test/Collectd/Config.pm \
 	  lib/Test/Collectd/Plugins.pm blib/lib/Test/Collectd/Plugins.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
@@ -829,9 +838,9 @@ distsign ::
 	cpansign -s
 
 config ::
-	$(NOECHO) $(MKPATH) "$(INST_LIB)/auto/share/dist/$(DISTNAME)/."
-	$(NOECHO) $(CHMOD) $(PERM_DIR) "$(INST_LIB)/auto/share/dist/$(DISTNAME)/."
-	$(NOECHO) $(CP) "share/types.db" "$(INST_LIB)/auto/share/dist/$(DISTNAME)/types.db"
+	$(NOECHO) $(MKPATH) "$(INST_LIB)/auto/share/module/Test-Collectd-Plugins/."
+	$(NOECHO) $(CHMOD) $(PERM_DIR) "$(INST_LIB)/auto/share/module/Test-Collectd-Plugins/."
+	$(NOECHO) $(CP) "share/types.db" "$(INST_LIB)/auto/share/module/Test-Collectd-Plugins/types.db"
 
 
 # --- Module::Install::AutoInstall section:
@@ -849,14 +858,25 @@ installdeps_notest ::
 	$(NOECHO) $(NOOP)
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,ExtUtils::MakeMaker,6.11,Package::Alias,0
+	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,Package::Alias,0,Carp,0,Parse::Lex,0
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,ExtUtils::MakeMaker,6.11,Package::Alias,0
+	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,Package::Alias,0,Carp,0,Parse::Lex,0
 
 listdeps ::
 	@$(PERL) -le "print for @ARGV" 
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Test::More ExtUtils::MakeMaker Package::Alias
+	@$(PERL) -le "print for @ARGV" Test::More Test::File::ShareDir Parse::Yapp ExtUtils::MakeMaker Package::Alias Carp Parse::Lex
 
+
+CONFIG_PARSER_DIRNAME = blib/lib/Test/Collectd/Config
+CONFIG_PARSER_FILENAME = $(CONFIG_PARSER_DIRNAME)/Parse.pm
+
+$(CONFIG_PARSER_FILENAME): parser.yp pm_to_blib
+	mkdir -p $(CONFIG_PARSER_DIRNAME)
+	yapp -s -m Test::Collectd::Config::Parse -o $(CONFIG_PARSER_FILENAME) parser.yp
+
+parser: $(CONFIG_PARSER_FILENAME)
+
+all :: parser

@@ -5,6 +5,8 @@ author:
   - 'Fabien Wernli <wernli_workingat_in2p3.fr>'
 build_requires:
   ExtUtils::MakeMaker: 6.59
+  Parse::Yapp: 0
+  Test::File::ShareDir: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.59
@@ -21,8 +23,12 @@ no_index:
     - inc
     - share
     - t
+recommends:
+  File::ShareDir: 0
 requires:
+  Carp: 0
   Package::Alias: 0
+  Parse::Lex: 0
   perl: 5.6.0
 resources:
   license: http://dev.perl.org/licenses/
