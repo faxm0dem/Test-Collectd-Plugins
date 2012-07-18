@@ -18,7 +18,7 @@
 
 %{
 sub YYERROR {
-	die @_;
+	join " ", @_;
 }
 %}
 

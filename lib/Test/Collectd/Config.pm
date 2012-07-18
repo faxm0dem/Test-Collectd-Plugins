@@ -108,16 +108,25 @@ sub _lex {
 
 sub _parse_error {die "parser failed ", join ", ", map { "$_: ".${$_[0] -> {$_}}} qw(TOKEN VALUE)}
 
-=head2 parse ( $filename )
+=head2 parse ( $config_in )
 
-Parses filename and returns the compiled configuration in the form of a nested structure identical to the one returned to the plugin's config callback.
+Parses $config_in and returns the compiled configuration in the form of a nested structure identical to the one returned to the plugin's config callback. The 
 
 =cut
 
 sub parse {
-	my $file = shift || die "usage: __PACKAGE__->parse(\$configfile)";
-	my $fh = IO::File -> new ( $file, 'r' ) or die $!;
-	$lexer->from($fh);
+	my $in = shift || die "usage: __PACKAGE__->parse(\$config_in)";
+	my $config;
+	if (ref $in && $in->isa("GLOB")) {
+		$config = $in;
+	} elsif (!ref $in) {
+		my $fh = IO::File -> new ( $in, 'r' ) or die $!;
+		local $/;
+		$config = $fh;
+	} else {
+		die 'parse($config_in) must be either a string (filename) or a GLOB (handle).';
+	}
+	$lexer->from($config);
 	my $parser = Test::Collectd::Config::Parse -> new;
 	my $value = $parser -> YYParse(yylex => \&_lex, yyerror => \&_parse_error);
 }

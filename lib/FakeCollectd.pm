@@ -77,7 +77,6 @@ Will Populate %FakeCollectd using provided arguments.
 
 sub plugin_register {
 	my ($type,$name,$data) = @_;
-	use DDP;
 	my $caller = scalar caller 0;
 	$FakeCollectd{$caller}->{Name} = $name;
 	if ($type eq TYPE_CONFIG) {
@@ -130,8 +129,7 @@ Replaces log function
 =cut
 
 sub plugin_log {
-	print join " ", @_;
-	1;
+	eval {croak join " ", @_}
 }
 
 1;

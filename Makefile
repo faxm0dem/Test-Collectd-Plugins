@@ -21,7 +21,7 @@
 #     NAME => q[Test::Collectd::Plugins]
 #     NO_META => q[1]
 #     PREREQ_PM => { Test::More=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Package::Alias=>q[0], Carp=>q[0] }
-#     VERSION => q[0.1001]
+#     VERSION => q[0.1002]
 #     VERSION_FROM => q[lib/Test/Collectd/Plugins.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
@@ -64,11 +64,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = Test::Collectd::Plugins
 NAME_SYM = Test_Collectd_Plugins
-VERSION = 0.1001
+VERSION = 0.1002
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_1001
+VERSION_SYM = 0_1002
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.1001
+XS_VERSION = 0.1002
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -268,7 +268,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = Test-Collectd-Plugins
-DISTVNAME = Test-Collectd-Plugins-0.1001
+DISTVNAME = Test-Collectd-Plugins-0.1002
 
 
 # --- MakeMaker macro section:
@@ -786,7 +786,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.1001">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.1002">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Common out-of-band collectd plugin test suite</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Fabien Wernli, C&lt;&lt; &lt;wernli_workingat_in2p3.fr&gt; &gt;&gt;, Fabien Wernli &lt;wernli_workingat_in2p3.fr&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd

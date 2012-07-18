@@ -21,12 +21,12 @@ plugin_register(TYPE_CONFIG, $plugin_name, 'my_config');
 plugin_register(TYPE_READ, $plugin_name, 'my_read');
 
 sub my_read {
-	my @values = scalar @config_values ? @config_values : ( 42 );
+	my @values = scalar @config_values ? @config_values : ( 42, 42, 42);
 	plugin_dispatch_values({
 		interval => $interval_g,
 		host => "localhost.localdomain",
 		plugin => $plugin_name,
-		type => "gauge",
+		type => "load",
 		type_instance => "ti",
 		plugin_instance => "pi",
 		values => \@values,
@@ -35,6 +35,7 @@ sub my_read {
 }
 
 sub my_config {
+	@config_values = ();
 	for my $child (@{$_[0] -> {children}}) {
 		my $key = $child -> {key};
 		push @config_values, @{$child -> {values}};

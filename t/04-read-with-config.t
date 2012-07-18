@@ -12,6 +12,7 @@ use strict;
 use warnings;
 use lib "t/lib";
 use Test::Collectd::Plugins;
+use Test::Collectd::Config qw( parse );
 use Data::Dumper;
 use Test::More;
 use Module::Find;
@@ -28,10 +29,10 @@ for (@found) {
 	my $configfile = "$FindBin::Bin/dat/$modulepath.conf";
 	die "Missing configfile: $configfile" unless -f $configfile;
 	# parse config to extract injected "values" part of vl_list
-	my $config = Test::Collectd::Plugins::_read_config ($module, $plugin,$configfile);
+	my $config = parse ($configfile);
 	my $expected = $config -> {children} -> [0] -> {values};
 	# spawn the plugin's read function and extract the "values" part of vl_list
-	my ($val) = read_values ($module, $plugin);
+	my ($val) = read_values ($module, $plugin, $configfile);
 	my $got = $val->[0]->{values};
 	is_deeply($got, $expected, "data matches");
 }
