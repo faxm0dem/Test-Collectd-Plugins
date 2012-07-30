@@ -20,7 +20,7 @@
 #     MIN_PERL_VERSION => q[5.006]
 #     NAME => q[Test::Collectd::Plugins]
 #     NO_META => q[1]
-#     PREREQ_PM => { Test::More=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Package::Alias=>q[0], Carp=>q[0] }
+#     PREREQ_PM => { namespace::autoclean=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Test::More=>q[0], Test::Builder=>q[0.90], Package::Alias=>q[0] }
 #     VERSION => q[0.1002]
 #     VERSION_FROM => q[lib/Test/Collectd/Plugins.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
@@ -791,9 +791,10 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Fabien Wernli, C&lt;&lt; &lt;wernli_workingat_in2p3.fr&gt; &gt;&gt;, Fabien Wernli &lt;wernli_workingat_in2p3.fr&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,006,0,0" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Carp::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Package::Alias" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Parse::Lex" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::Builder" VERSION="0.9" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="namespace::autoclean" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-gnu-thread-multi-5.14" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    </IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -858,16 +859,16 @@ installdeps_notest ::
 	$(NOECHO) $(NOOP)
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,Package::Alias,0,Carp,0,Parse::Lex,0
+	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,Package::Alias,0,Carp,0,Parse::Lex,0
+	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
 
 listdeps ::
 	@$(PERL) -le "print for @ARGV" 
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Test::More Test::File::ShareDir Parse::Yapp ExtUtils::MakeMaker Package::Alias Carp Parse::Lex
+	@$(PERL) -le "print for @ARGV" Test::More Test::File::ShareDir Parse::Yapp ExtUtils::MakeMaker namespace::autoclean Package::Alias Parse::Lex Test::Builder
 
 
 CONFIG_PARSER_DIRNAME = blib/lib/Test/Collectd/Config

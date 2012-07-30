@@ -21,9 +21,7 @@ README
 share/types.db
 t/00-load.t
 t/01-read.t
-t/02-empty.t
-t/03-many.t
-t/boilerplate.t
+t/02-invalid.t
 t/dat/Collectd/Plugins/OK/Read.dat
 t/dat/Collectd/Plugins/OK/ReadTwice.dat
 t/lib/Collectd/Plugins/NOK/Empty.pm

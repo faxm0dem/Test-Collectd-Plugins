@@ -13,3 +13,5 @@ Test-Collectd-Plugins-*
 MYMETA.*
 .svn
 inc
+MANIFEST.bak
+Makefile.bak

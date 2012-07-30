@@ -101,6 +101,8 @@ sub _init_plugin ($) {
 	my $init = $FakeCollectd{$plugin}->{Callback}->{Init};
 	if (defined $init) {
 		eval "$init()";
+	} else {
+		return 1;
 	}
 	if ($@) {
 		return undef;
@@ -278,8 +280,6 @@ $tb -> subtest($msg, sub {
 =cut
 
 	}
-
-	$tb -> ok(@values);
 }); # end subtest
 }
 

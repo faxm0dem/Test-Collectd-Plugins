@@ -9,9 +9,10 @@ build_requires 'Test::More';
 build_requires 'Test::File::ShareDir';
 build_requires 'Parse::Yapp';
 
+requires 'namespace::autoclean';
 requires 'Package::Alias';
-requires 'Carp';
 requires 'Parse::Lex';
+requires 'Test::Builder' => '0.90';
 
 recommends 'File::ShareDir';
 
