@@ -55,7 +55,7 @@ sub YYERROR {
 %type <ci> entire_file
 
 /* pass an verbose, specific error message to yyerror() */
-/* this is bison only shit %error-verbose */
+/* this is bison only jargon %error-verbose */
 
 %%
 string:
@@ -165,7 +165,7 @@ entire_file:
 
 %%
 sub unquote ($) {
-	(my $string = shift) =~ s/"//g;
+	(my $string = shift) =~ s/(?<!\\)"//g;
 	return $string;
 }
 

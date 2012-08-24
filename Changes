@@ -1,5 +1,9 @@
 Revision history for Test-Collectd-Plugins
 
+0.1003  Fri Aug 24 15:14:08 CEST 2012
+        - fix bug where import args were not passed through thus making 'tests => N' work
+        - make comments more polite
+
 0.1001  May 16 12:04:01 CEST 2012
         Release
 

@@ -4,7 +4,7 @@
 
 Summary: Collectd Plugin Test Suite
 Name: perl-Test-Collectd-Plugins
-Version: 0.1002
+Version: 0.1003
 Release: 0%{?dist}
 Group: Applications/System
 Packager: Fabien Wernli

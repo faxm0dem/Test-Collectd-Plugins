@@ -1,7 +1,7 @@
 # This Makefile is for the Test::Collectd::Plugins extension to perl.
 #
 # It was generated automatically by MakeMaker version
-# 6.62 (Revision: 66200) from the contents of
+# 6.57_05 (Revision: 65705) from the contents of
 # Makefile.PL. Don't edit this file, edit Makefile.PL instead.
 #
 #       ANY CHANGES MADE HERE WILL BE LOST!
@@ -13,15 +13,14 @@
 
 #     ABSTRACT => q[Common out-of-band collectd plugin test suite]
 #     AUTHOR => [q[Fabien Wernli, C<< <wernli_workingat_in2p3.fr> >>, Fabien Wernli <wernli_workingat_in2p3.fr>]]
-#     BUILD_REQUIRES => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.59], Parse::Yapp=>q[0], Test::File::ShareDir=>q[0] }
-#     CONFIGURE_REQUIRES => {  }
+#     BUILD_REQUIRES => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.59], Module::Find=>q[0], Parse::Yapp=>q[0], Test::File::ShareDir=>q[0] }
 #     DISTNAME => q[Test-Collectd-Plugins]
 #     LICENSE => q[perl]
 #     MIN_PERL_VERSION => q[5.006]
 #     NAME => q[Test::Collectd::Plugins]
 #     NO_META => q[1]
-#     PREREQ_PM => { namespace::autoclean=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Test::More=>q[0], Test::Builder=>q[0.90], Package::Alias=>q[0] }
-#     VERSION => q[0.1002]
+#     PREREQ_PM => { namespace::autoclean=>q[0], Parse::Lex=>q[0], ExtUtils::MakeMaker=>q[6.59], Test::File::ShareDir=>q[0], Parse::Yapp=>q[0], Test::More=>q[0], Test::Builder=>q[0.90], Module::Find=>q[0], Package::Alias=>q[0] }
+#     VERSION => q[0.1003]
 #     VERSION_FROM => q[lib/Test/Collectd/Plugins.pm]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
@@ -49,7 +48,7 @@ LIBC =
 LIB_EXT = .a
 OBJ_EXT = .o
 OSNAME = linux
-OSVERS = 3.2.0-2-amd64
+OSVERS = 2.6.32-5-amd64
 RANLIB = :
 SITELIBEXP = /usr/local/share/perl/5.14.2
 SITEARCHEXP = /usr/local/lib/perl/5.14.2
@@ -64,11 +63,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = Test::Collectd::Plugins
 NAME_SYM = Test_Collectd_Plugins
-VERSION = 0.1002
+VERSION = 0.1003
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_1002
+VERSION_SYM = 0_1003
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.1002
+XS_VERSION = 0.1003
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -141,9 +140,9 @@ PERM_DIR = 755
 PERM_RW = 644
 PERM_RWX = 755
 
-MAKEMAKER   = /home/fwernli/perl5/lib/perl5/ExtUtils/MakeMaker.pm
-MM_VERSION  = 6.62
-MM_REVISION = 66200
+MAKEMAKER   = /usr/share/perl/5.14/ExtUtils/MakeMaker.pm
+MM_VERSION  = 6.57_05
+MM_REVISION = 65705
 
 # FULLEXT = Pathname for extension directory (eg Foo/Bar/Oracle).
 # BASEEXT = Basename part of FULLEXT. May be just equal FULLEXT. (eg Oracle)
@@ -203,7 +202,7 @@ PM_TO_BLIB = lib/FakeCollectd.pm \
 
 
 # --- MakeMaker platform_constants section:
-MM_Unix_VERSION = 6.62
+MM_Unix_VERSION = 6.57_05
 PERL_MALLOC_DEF = -DPERL_EXTMALLOC_DEF -Dmalloc=Perl_malloc -Dfree=Perl_mfree -Drealloc=Perl_realloc -Dcalloc=Perl_calloc
 
 
@@ -268,7 +267,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = Test-Collectd-Plugins
-DISTVNAME = Test-Collectd-Plugins-0.1002
+DISTVNAME = Test-Collectd-Plugins-0.1003
 
 
 # --- MakeMaker macro section:
@@ -293,6 +292,7 @@ DISTVNAME = Test-Collectd-Plugins-0.1002
 
 PASTHRU = LIBPERL_A="$(LIBPERL_A)"\
 	LINKTYPE="$(LINKTYPE)"\
+	LD="$(LD)"\
 	PREFIX="$(PREFIX)"\
 	INSTALL_BASE="$(INSTALL_BASE)"
 
@@ -425,7 +425,7 @@ manifypods : pure_all  \
 	lib/FakeCollectd.pm \
 	lib/Test/Collectd/Config.pm \
 	lib/Test/Collectd/Plugins.pm
-	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	$(NOECHO) $(POD2MAN) --section=$(MAN3EXT) --perm_rw=$(PERM_RW) \
 	  lib/FakeCollectd.pm $(INST_MAN3DIR)/FakeCollectd.$(MAN3EXT) \
 	  lib/Test/Collectd/Config.pm $(INST_MAN3DIR)/Test::Collectd::Config.$(MAN3EXT) \
 	  lib/Test/Collectd/Plugins.pm $(INST_MAN3DIR)/Test::Collectd::Plugins.$(MAN3EXT) 
@@ -458,19 +458,18 @@ clean :: clean_subdirs
 	  *$(LIB_EXT) core \
 	  core.[0-9] $(INST_ARCHAUTODIR)/extralibs.all \
 	  core.[0-9][0-9] $(BASEEXT).bso \
-	  pm_to_blib.ts MYMETA.json \
-	  core.[0-9][0-9][0-9][0-9] MYMETA.yml \
-	  $(BASEEXT).x $(BOOTSTRAP) \
-	  perl$(EXE_EXT) tmon.out \
-	  *$(OBJ_EXT) pm_to_blib \
-	  $(INST_ARCHAUTODIR)/extralibs.ld blibdirs.ts \
-	  core.[0-9][0-9][0-9][0-9][0-9] *perl.core \
-	  core.*perl.*.? $(MAKE_APERL_FILE) \
-	  $(BASEEXT).def perl \
-	  core.[0-9][0-9][0-9] mon.out \
-	  lib$(BASEEXT).def perlmain.c \
-	  perl.exe so_locations \
-	  $(BASEEXT).exp 
+	  pm_to_blib.ts core.[0-9][0-9][0-9][0-9] \
+	  MYMETA.yml $(BASEEXT).x \
+	  $(BOOTSTRAP) perl$(EXE_EXT) \
+	  tmon.out *$(OBJ_EXT) \
+	  pm_to_blib $(INST_ARCHAUTODIR)/extralibs.ld \
+	  blibdirs.ts core.[0-9][0-9][0-9][0-9][0-9] \
+	  *perl.core core.*perl.*.? \
+	  $(MAKE_APERL_FILE) perl \
+	  $(BASEEXT).def core.[0-9][0-9][0-9] \
+	  mon.out lib$(BASEEXT).def \
+	  perlmain.c perl.exe \
+	  so_locations $(BASEEXT).exp 
 	- $(RM_RF) \
 	  blib 
 	- $(MV) $(FIRST_MAKEFILE) $(MAKEFILE_OLD) $(DEV_NULL)
@@ -584,12 +583,8 @@ ci :
 
 # --- MakeMaker distmeta section:
 distmeta : create_distdir metafile
-	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -e q{META.yml};' \
-	  -e 'eval { maniadd({q{META.yml} => q{Module YAML meta-data (added by MakeMaker)}}) }' \
+	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'eval { maniadd({q{META.yml} => q{Module meta-data (added by MakeMaker)}}) } ' \
 	  -e '    or print "Could not add META.yml to MANIFEST: $${'\''@'\''}\n"' --
-	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -f q{META.json};' \
-	  -e 'eval { maniadd({q{META.json} => q{Module JSON meta-data (added by MakeMaker)}}) }' \
-	  -e '    or print "Could not add META.json to MANIFEST: $${'\''@'\''}\n"' --
 
 
 
@@ -629,9 +624,7 @@ doc__install : doc_site_install
 	$(NOECHO) $(ECHO) INSTALLDIRS not defined, defaulting to INSTALLDIRS=site
 
 pure_perl_install :: all
-	$(NOECHO) $(MOD_INSTALL) \
-		read $(PERL_ARCHLIB)/auto/$(FULLEXT)/.packlist \
-		write $(DESTINSTALLARCHLIB)/auto/$(FULLEXT)/.packlist \
+	$(NOECHO) umask 022; $(MOD_INSTALL) \
 		$(INST_LIB) $(DESTINSTALLPRIVLIB) \
 		$(INST_ARCHLIB) $(DESTINSTALLARCHLIB) \
 		$(INST_BIN) $(DESTINSTALLBIN) \
@@ -643,7 +636,7 @@ pure_perl_install :: all
 
 
 pure_site_install :: all
-	$(NOECHO) $(MOD_INSTALL) \
+	$(NOECHO) umask 02; $(MOD_INSTALL) \
 		read $(SITEARCHEXP)/auto/$(FULLEXT)/.packlist \
 		write $(DESTINSTALLSITEARCH)/auto/$(FULLEXT)/.packlist \
 		$(INST_LIB) $(DESTINSTALLSITELIB) \
@@ -656,9 +649,7 @@ pure_site_install :: all
 		$(PERL_ARCHLIB)/auto/$(FULLEXT)
 
 pure_vendor_install :: all
-	$(NOECHO) $(MOD_INSTALL) \
-		read $(VENDORARCHEXP)/auto/$(FULLEXT)/.packlist \
-		write $(DESTINSTALLVENDORARCH)/auto/$(FULLEXT)/.packlist \
+	$(NOECHO) umask 022; $(MOD_INSTALL) \
 		$(INST_LIB) $(DESTINSTALLVENDORLIB) \
 		$(INST_ARCHLIB) $(DESTINSTALLVENDORARCH) \
 		$(INST_BIN) $(DESTINSTALLVENDORBIN) \
@@ -667,50 +658,31 @@ pure_vendor_install :: all
 		$(INST_MAN3DIR) $(DESTINSTALLVENDORMAN3DIR)
 
 doc_perl_install :: all
-	$(NOECHO) $(ECHO) Appending installation info to $(DESTINSTALLARCHLIB)/perllocal.pod
-	-$(NOECHO) $(MKPATH) $(DESTINSTALLARCHLIB)
-	-$(NOECHO) $(DOC_INSTALL) \
-		"Module" "$(NAME)" \
-		"installed into" "$(INSTALLPRIVLIB)" \
-		LINKTYPE "$(LINKTYPE)" \
-		VERSION "$(VERSION)" \
-		EXE_FILES "$(EXE_FILES)" \
-		>> $(DESTINSTALLARCHLIB)/perllocal.pod
 
 doc_site_install :: all
-	$(NOECHO) $(ECHO) Appending installation info to $(DESTINSTALLARCHLIB)/perllocal.pod
-	-$(NOECHO) $(MKPATH) $(DESTINSTALLARCHLIB)
-	-$(NOECHO) $(DOC_INSTALL) \
+	$(NOECHO) $(ECHO) Appending installation info to $(DESTINSTALLSITEARCH)/perllocal.pod
+	-$(NOECHO) umask 02; $(MKPATH) $(DESTINSTALLSITEARCH)
+	-$(NOECHO) umask 02; $(DOC_INSTALL) \
 		"Module" "$(NAME)" \
 		"installed into" "$(INSTALLSITELIB)" \
 		LINKTYPE "$(LINKTYPE)" \
 		VERSION "$(VERSION)" \
 		EXE_FILES "$(EXE_FILES)" \
-		>> $(DESTINSTALLARCHLIB)/perllocal.pod
+		>> $(DESTINSTALLSITEARCH)/perllocal.pod
 
 doc_vendor_install :: all
-	$(NOECHO) $(ECHO) Appending installation info to $(DESTINSTALLARCHLIB)/perllocal.pod
-	-$(NOECHO) $(MKPATH) $(DESTINSTALLARCHLIB)
-	-$(NOECHO) $(DOC_INSTALL) \
-		"Module" "$(NAME)" \
-		"installed into" "$(INSTALLVENDORLIB)" \
-		LINKTYPE "$(LINKTYPE)" \
-		VERSION "$(VERSION)" \
-		EXE_FILES "$(EXE_FILES)" \
-		>> $(DESTINSTALLARCHLIB)/perllocal.pod
 
 
 uninstall :: uninstall_from_$(INSTALLDIRS)dirs
 	$(NOECHO) $(NOOP)
 
 uninstall_from_perldirs ::
-	$(NOECHO) $(UNINSTALL) $(PERL_ARCHLIB)/auto/$(FULLEXT)/.packlist
 
 uninstall_from_sitedirs ::
 	$(NOECHO) $(UNINSTALL) $(SITEARCHEXP)/auto/$(FULLEXT)/.packlist
 
 uninstall_from_vendordirs ::
-	$(NOECHO) $(UNINSTALL) $(VENDORARCHEXP)/auto/$(FULLEXT)/.packlist
+
 
 
 # --- MakeMaker force section:
@@ -786,7 +758,7 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.1002">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.1003">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Common out-of-band collectd plugin test suite</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Fabien Wernli, C&lt;&lt; &lt;wernli_workingat_in2p3.fr&gt; &gt;&gt;, Fabien Wernli &lt;wernli_workingat_in2p3.fr&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
@@ -859,16 +831,16 @@ installdeps_notest ::
 	$(NOECHO) $(NOOP)
 
 upgradedeps ::
-	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
+	$(PERL) Makefile.PL --config= --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,Module::Find,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
 
 upgradedeps_notest ::
-	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
+	$(PERL) Makefile.PL --config=notest,1 --upgradedeps=Test::More,0,Test::File::ShareDir,0,Parse::Yapp,0,Module::Find,0,ExtUtils::MakeMaker,6.11,namespace::autoclean,0,Package::Alias,0,Parse::Lex,0,Test::Builder,0.90
 
 listdeps ::
 	@$(PERL) -le "print for @ARGV" 
 
 listalldeps ::
-	@$(PERL) -le "print for @ARGV" Test::More Test::File::ShareDir Parse::Yapp ExtUtils::MakeMaker namespace::autoclean Package::Alias Parse::Lex Test::Builder
+	@$(PERL) -le "print for @ARGV" Test::More Test::File::ShareDir Parse::Yapp Module::Find ExtUtils::MakeMaker namespace::autoclean Package::Alias Parse::Lex Test::Builder
 
 
 CONFIG_PARSER_DIRNAME = blib/lib/Test/Collectd/Config

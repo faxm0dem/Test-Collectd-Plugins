@@ -20,7 +20,7 @@ Version 0.01
 
 =cut
 
-our $VERSION = '0.1002';
+our $VERSION = '0.1003';
 
 use base 'Test::Builder::Module';
 use IO::File;
@@ -40,6 +40,8 @@ sub import_extra {
 	for (keys %$args) {
 		if (/^typesdb$/i) {
 			$typesdb = $args->{$_};
+		} else {
+			push @$list, $_ => $args->{$_};
 		}
 	}
 	return;
@@ -159,6 +161,15 @@ sub _config ($$) {
 	}
 }
 
+=head2 plan tests => $num
+
+See L<Test::More/plan>.
+
+=cut
+
+#sub plan { __PACKAGE__ -> builder -> plan (@_) }
+#sub diag { __PACKAGE__ -> builder -> diag (@_) }
+
 =head2 read_ok <$module> <$plugin> [$message]
 
 Loads the plugin module identified by $module, then tries to fire up the registered read callback for this plugin ($plugin), while intercepting all calls to L<Collectd/plugin_dispatch_values>, storing its arguments into the %FakeCollectd hash. The latter are checked against the following rules, which match the collectd guidelines:
@@ -178,7 +189,7 @@ $tb -> subtest($msg, sub {
 
 	$tb -> ok (_load_module($module), "load plugin module") or $tb -> diag ($@);
 	$tb -> ok (_reset_values($plugin), "reset values") or $tb -> diag ($@);
-	$tb -> ok (_init_plugin($plugin),"init plugin") or $tb -> diag ($@);
+	$tb -> ok (_init_plugin($plugin),"init plugin"); $tb -> diag ($@) if $@;
 	$tb -> ok (_read($plugin),"read plugin") or $tb -> diag ($@);
 	my @values = _values ($plugin);
 	$tb -> ok(@values, "read callback returned some values") or $tb -> diag ($@);
@@ -217,7 +228,7 @@ $tb -> subtest($msg, sub {
 =cut
 
 		my @type = _get_type($dispatch{type});
-		$tb -> ok (@type, "type $dispatch{type} matches " . join (", ", @$typesdb));
+		$tb -> ok (scalar @type, "type $dispatch{type} found in " . join (", ", @$typesdb));
 
 =item * The key C<values> must be an array reference and the number of elements must match its data type in module's configuration option C<types.db>.
 
@@ -296,10 +307,13 @@ sub read_config_ok ($$$;$) {
 	my $msg = shift || "read with config OK";
 
 	my $tb = __PACKAGE__->builder;
-
-	$tb -> ok (_load_module($module), "load plugin module");
-	$tb -> ok (_config($plugin,$config),"config ok") or $tb -> diag ($@);
-	read_ok ($module,$plugin,$msg);
+	$tb -> subtest($msg, sub {
+			$tb -> plan ( tests => 3 );
+			$tb -> ok (_load_module($module), "load plugin module");
+			$tb -> ok (_config($plugin,$config),"config ok") or $tb -> diag ($@);
+			read_ok ($module,$plugin,$msg);
+		}
+	);
 }
 
 

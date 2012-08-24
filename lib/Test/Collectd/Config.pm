@@ -45,7 +45,8 @@ my $OCT_NUMBER = '0[0-7]+';
 my $DEC_NUMBER = '[\+\-]?[0-9]+';
 my $FLOAT_NUMBER = '[\+\-]?[0-9]*\.[0-9]+([eE][\+\-][0-9]+)?';
 my $NUMBER = "($FLOAT_NUMBER|$HEX_NUMBER|$OCT_NUMBER|$DEC_NUMBER)";
-my $QUOTED_STRING = '([^\"]+|\.)*';
+my $QUOTED_STRING = '([^\\"]+|\\.)*';
+#$QUOTED_STRING = '((?<!\\\)"|.)*';
 my $UNQUOTED_STRING = '[0-9A-Za-z_]+';
 my $WHITE_SPACE = '[\ \t\b]';
 my $NON_WHITE_SPACE = '[^\ \t\b]';
@@ -76,7 +77,6 @@ my @lex = (
 sub _error {
 	die qq!can\'t analyze: "$_[1]"!;
 }
-
 sub _start_string {
 	$ml_buffer = "";
 	($ml_buffer.= $_[1]) =~ s/\\\r?\n$//;
@@ -128,7 +128,7 @@ sub parse {
 	}
 	$lexer->from($config);
 	my $parser = Test::Collectd::Config::Parse -> new;
-	my $value = $parser -> YYParse(yylex => \&_lex, yyerror => \&_parse_error);
+	my $value = $parser -> YYParse(yylex => \&_lex, yyerror => \&_parse_error, yydebug => 0x00);
 }
 
 1;
