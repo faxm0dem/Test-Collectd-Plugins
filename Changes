@@ -1,5 +1,8 @@
 Revision history for Test-Collectd-Plugins
 
+0.1004  Thu Sep 20 09:21:51 CEST 2012
+        - bumped Parse::Yapp requirement to version 0.22 (yapp.pl renamed to yapp)
+          this presumably caused UNKNOWN test state in some build systems on cpantesters
 0.1003  Fri Aug 24 15:14:08 CEST 2012
         - fix bug where import args were not passed through thus making 'tests => N' work
         - make comments more polite

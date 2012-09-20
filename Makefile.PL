@@ -7,7 +7,7 @@ license  'perl';
 
 build_requires 'Test::More';
 build_requires 'Test::File::ShareDir';
-build_requires 'Parse::Yapp';
+build_requires 'Parse::Yapp' => '0.22';
 build_requires 'Module::Find';
 
 requires 'namespace::autoclean';
