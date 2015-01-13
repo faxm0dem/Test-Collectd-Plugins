@@ -4,15 +4,16 @@ author:
   - 'Fabien Wernli, C<< <wernli_workingat_in2p3.fr> >>'
   - 'Fabien Wernli <wernli_workingat_in2p3.fr>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.59
   Module::Find: 0
-  Parse::Yapp::Driver: 0.22
+  Parse::Yapp::Driver: '0.22'
   Test::File::ShareDir: 0
   Test::More: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.59
 distribution_type: module
-generated_by: 'Module::Install version 1.00'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.14'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -23,14 +24,16 @@ no_index:
     - inc
     - share
     - t
+  package:
+    - FakeCollectd
 recommends:
   File::ShareDir: 0
 requires:
   Package::Alias: 0
   Parse::Lex: 0
-  Test::Builder: 0.90
+  Test::Builder: '0.90'
   namespace::autoclean: 0
   perl: 5.6.0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.1004
+version: '0.1006'

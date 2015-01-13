@@ -4,7 +4,7 @@
 
 Summary: Collectd Plugin Test Suite
 Name: perl-Test-Collectd-Plugins
-Version: 0.1003
+Version: 0.1006
 Release: 0%{?dist}
 Group: Applications/System
 Packager: Fabien Wernli
@@ -21,7 +21,7 @@ Requires: perl(Test::Builder) >= 0.90
 
 BuildRequires: perl(Test::More)
 #BuildRequires: perl(Test::File::ShareDir) # this is a dep nightmare use local::lib for building
-BuildRequires: perl(Parse::Yapp)
+BuildRequires: perl(Parse::Yapp) >= 0.22
 
 %description
 This package contains the Test suitre for collectd read plugins

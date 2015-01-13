@@ -17,21 +17,25 @@ requires 'Test::Builder' => '0.90';
 
 recommends 'File::ShareDir';
 
+no_index package => 'FakeCollectd';
+
 install_share 'module', 'Test::Collectd::Plugins', 'share';
 
 auto_install;
 
 
 # generate the Parser
-postamble(q!
+(my $yappbin = $^X ) =~ s!perl([\d\.]*)$!yapp!;
+$yappbin = "yapp" unless -x $yappbin;
+postamble(qq!
 CONFIG_PARSER_DIRNAME = blib/lib/Test/Collectd/Config
-CONFIG_PARSER_FILENAME = $(CONFIG_PARSER_DIRNAME)/Parse.pm
+CONFIG_PARSER_FILENAME = \$(CONFIG_PARSER_DIRNAME)/Parse.pm
 
-$(CONFIG_PARSER_FILENAME): parser.yp pm_to_blib
-	mkdir -p $(CONFIG_PARSER_DIRNAME)
-	yapp -s -m Test::Collectd::Config::Parse -o $(CONFIG_PARSER_FILENAME) parser.yp
+\$(CONFIG_PARSER_FILENAME): parser.yp pm_to_blib
+	mkdir -p \$(CONFIG_PARSER_DIRNAME)
+	$yappbin -s -m Test::Collectd::Config::Parse -o \$(CONFIG_PARSER_FILENAME) parser.yp
 
-parser: $(CONFIG_PARSER_FILENAME)
+parser: \$(CONFIG_PARSER_FILENAME)
 
 all :: parser
 !);

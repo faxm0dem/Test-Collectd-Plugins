@@ -16,11 +16,11 @@ Test::Collectd::Plugins - Common out-of-band collectd plugin test suite
 
 =head1 VERSION
 
-Version 0.01
+Version 0.1005
 
 =cut
 
-our $VERSION = '0.1004';
+our $VERSION = '0.1006';
 
 use base 'Test::Builder::Module';
 use IO::File;
