@@ -1,5 +1,8 @@
 Revision history for Test-Collectd-Plugins
 
+0.1007  Tue Jan 13 11:07:42 CET 2015
+        - duplicate key for _values in order to allow read_ok("My::Module",not_plugin_name)
+
 0.1005  Thu Sep 20 13:09:37 CEST 2012
         - slight change to add absolute path to "yapp" in Makefile postamble
           as suggested by BinGOs on #cpantesters-discuss

@@ -16,11 +16,11 @@ Test::Collectd::Plugins - Common out-of-band collectd plugin test suite
 
 =head1 VERSION
 
-Version 0.1006
+Version 0.1007
 
 =cut
 
-our $VERSION = '0.1006';
+our $VERSION = '0.1007';
 
 use base 'Test::Builder::Module';
 use IO::File;
@@ -188,10 +188,10 @@ sub read_ok ($$;$) {
 $tb -> subtest($msg, sub {
 
 	$tb -> ok (_load_module($module), "load plugin module") or $tb -> diag ($@);
-	$tb -> ok (_reset_values($plugin), "reset values") or $tb -> diag ($@);
+	$tb -> ok (_reset_values($module), "reset values") or $tb -> diag ($@);
 	$tb -> ok (_init_plugin($plugin),"init plugin"); $tb -> diag ($@) if $@;
 	$tb -> ok (_read($plugin),"read plugin") or $tb -> diag ($@);
-	my @values = _values ($plugin);
+	my @values = _values ($module);
 	$tb -> ok(@values, "read callback returned some values") or $tb -> diag ($@);
 	$tb -> ok(scalar @values, "dispatch called");
 	for (@values) {

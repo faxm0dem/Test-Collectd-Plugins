@@ -108,7 +108,10 @@ sub plugin_dispatch_values {
 		croak "plugin_dispatch_values $caller: no 'plugin' key in dispatch";
 		return undef;
 	}
+	# confused here as to which PK to use
+	# use both!
 	push @{$FakeCollectd{$plugin}->{Values}}, \@_;
+	push @{$FakeCollectd{$caller}->{Values}}, \@_;
 	1;
 }
 
