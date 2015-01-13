@@ -16,7 +16,7 @@ Test::Collectd::Plugins - Common out-of-band collectd plugin test suite
 
 =head1 VERSION
 
-Version 0.1005
+Version 0.1006
 
 =cut
 
