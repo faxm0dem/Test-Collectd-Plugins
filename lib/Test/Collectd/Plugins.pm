@@ -16,11 +16,11 @@ Test::Collectd::Plugins - Common out-of-band collectd plugin test suite
 
 =head1 VERSION
 
-Version 0.1007
+Version 0.1008
 
 =cut
 
-our $VERSION = '0.1007';
+our $VERSION = '0.1008';
 
 use base 'Test::Builder::Module';
 use IO::File;
@@ -252,7 +252,7 @@ $tb -> subtest($msg, sub {
 			if (exists $dispatch{$_}) {
 				my $ref = ref $dispatch{$_};
 				$tb -> is_eq ($ref, "", "$_ is SCALAR");
-				$tb -> cmp_ok(length $dispatch{$_}, '<', 63, "$_ is valid");
+				$tb -> cmp_ok(length $dispatch{$_}, '<', 63, "$_ is valid") if $dispatch{$_};
 			}
 		}
 

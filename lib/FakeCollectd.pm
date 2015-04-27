@@ -1,4 +1,5 @@
-package FakeCollectd;
+package # hide from PAUSE
+	FakeCollectd;
 
 =head1 NAME
 

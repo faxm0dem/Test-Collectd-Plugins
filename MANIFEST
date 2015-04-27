@@ -32,6 +32,7 @@ t/dat/Collectd/Config/collectd.dat
 t/dat/Collectd/Plugins/OK/Read.dat
 t/dat/Collectd/Plugins/OK/ReadTwice.dat
 t/dat/Collectd/Plugins/OKConfig/Read.conf
+t/dat/Collectd/Plugins/OKConfig/ReadEscape.conf
 t/lib/Collectd/Plugins/NOK/Empty.pm
 t/lib/Collectd/Plugins/NOK/ReadDispatchNotHash.pm
 t/lib/Collectd/Plugins/NOK/ReadHostNotScalar.pm
@@ -49,6 +50,7 @@ t/lib/Collectd/Plugins/NOK/ReadValuesNotArray.pm
 t/lib/Collectd/Plugins/OK/Read.pm
 t/lib/Collectd/Plugins/OK/ReadTwice.pm
 t/lib/Collectd/Plugins/OKConfig/Read.pm
+t/lib/Collectd/Plugins/OKConfig/ReadEscape.pm
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
