@@ -251,7 +251,7 @@ $tb -> subtest($msg, sub {
 			if (exists $dispatch{$_}) {
 				my $ref = ref $dispatch{$_};
 				$tb -> is_eq ($ref, "", "$_ is SCALAR");
-				$tb -> cmp_ok(length $dispatch{$_}, '<', 63, "$_ is valid") if $dispatch{$_};
+				$tb -> cmp_ok(length $dispatch{$_}, '<=', 63, "$_ is valid") if $dispatch{$_};
 			}
 		}
 
