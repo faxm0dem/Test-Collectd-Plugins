@@ -1,5 +1,9 @@
 Revision history for Test-Collectd-Plugins
 
+0.1009  Thu Jan 26 10:19:20 CET 2017
+        - remove deprecated call to POSIX/isdigit
+          that caused cpantester failures
+
 0.1007  Tue Jan 13 11:07:42 CET 2015
         - duplicate key for _values in order to allow read_ok("My::Module",not_plugin_name)
 

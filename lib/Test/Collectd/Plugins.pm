@@ -19,7 +19,7 @@ Version 0.1008
 
 =cut
 
-our $VERSION = '0.1008';
+our $VERSION = '0.1009';
 
 use base 'Test::Builder::Module';
 use IO::File;
