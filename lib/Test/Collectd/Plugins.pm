@@ -4,7 +4,6 @@ use 5.006;
 use strict;
 use warnings;
 use Carp qw(croak cluck);
-use POSIX qw/isdigit/;
 use namespace::autoclean;
 use Test::Collectd::Config qw(parse);
 
