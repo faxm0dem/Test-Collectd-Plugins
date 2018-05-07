@@ -1,0 +1,37 @@
+---
+stages:
+  - build
+  - deploy
+before_script:
+  - yum clean all
+  - "yum install rpmdevtools perl-Module-Install cpan perl'(Test::Collectd::Plugins)' perl'(namespace::autoclean)' perl'(Path::Tiny)' perl'(HTTP::Tiny)' perl'(Test::Simple)' perl'(Parse::Template)' perl'(XML::Twig)' collectd-perl -y"
+  - 'cpan || :'
+  - 'cpan -i Test::File::ShareDir || :'
+variables:
+  PERL_MM_USE_DEFAULT: 1
+  PERL_EXTUTILS_AUTOINSTALL: --defaultdeps
+
+centos7_build_rpm:
+  stage: build
+  image: 'gitlab-registry.in2p3.fr/cc-in2p3/gitlab-ci-ccin2p3-docker-images:centos7-ccin2p3'
+  allow_failure: false
+  script:
+    - './build_rpm.sh'
+  artifacts:
+    paths:
+      - rpmbuild/RPMS/noarch/*
+      - rpmbuild/SRPMS/*
+    expire_in: 1 hour
+
+centos7_deploy_rpm:
+  image: gitlab-registry.in2p3.fr/cc-in2p3/gitlab-ci-ccin2p3-docker-images:pulp-admin
+  stage: deploy
+  only:
+    - tags
+  script:
+    - 'mkdir -m 0700 -p /root/.pulp && echo -e "${PULP_CREDENTIALS}" >/root/.pulp/user-cert.pem'
+    - 'pulp-admin rpm repo uploads rpm --dir rpmbuild/RPMS/noarch --repo-id cc7'
+    - 'pulp-admin rpm repo publish run --repo-id cc7'
+  dependencies:
+    - centos7_build_rpm
+
