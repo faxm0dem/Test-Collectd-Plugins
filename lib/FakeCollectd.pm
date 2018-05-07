@@ -36,6 +36,7 @@ our %EXPORT_TAGS = (
 		$hostname_g
 		$interval_g
 		plugin_register
+		plugin_get_interval
 		plugin_dispatch_values
 		plugin_log
 		WARN
@@ -114,6 +115,16 @@ sub plugin_dispatch_values {
 	push @{$FakeCollectd{$plugin}->{Values}}, \@_;
 	push @{$FakeCollectd{$caller}->{Values}}, \@_;
 	1;
+}
+
+=head2 plugin_get_interval ()
+
+Returns global interval
+
+=cut
+
+sub plugin_get_interval {
+	$interval_g
 }
 
 =head2 WARN
